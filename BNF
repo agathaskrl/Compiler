@@ -1,0 +1,94 @@
+<program>::= PROGRAM <id> <newline> <varexp> <struct> <function> <main> EOF
+<character>::= [a-zA-Z]
+<tab>::= [\t]
+<newline>::= [\n]
+<id>::= [a-z][a-z0-9]*
+<digit> ::= [0-9]
+<number> ::= [0-9][0-9]*
+<data_type>::= <var>
+|<char>
+|<int>
+<program-initialization> ::= PROGRAM
+<struct>::= <struct_type> struct <newline>| ε
+<struct_type>::= STRUCT <id> <newline> <varexp> <id> ENDSTRUCT
+|TYPEDEF STRUCT <id> <newline> <varexp> <id> ENDSTRUCT
+| ε
+<function>::= FUNCT <ID> (<var>) <newline> <varexp> <functionbody> RETURN
+ENDFUNCT <newline>
+|<function> <function>
+| ε
+<varexp>::= VARS <var_type> <var>; <newline>
+|<varexp> <varexp>
+|ε
+<vartype>::= CHAR
+|INTEGER
+<var>::= <id>
+|<id>, <var>
+|ε
+<functionbody>::= <command>
+|<functionbody> <command>
+| ε
+2
+<command>::= <assignment> <newline>
+|<loop> <newline>
+|<check> <newline>
+|<print> <newline>
+|<break> <newline>
+<assignment>::= <id> = <expression>
+|<id> = <expression>;
+<expression>::= <literal>
+|<id> (<var>)
+|<id> [T_NUMBER]
+|<operation>
+<operation>::= <literal> <noperator> <literal>
+|<operation> <noperator> <operation>
+|<operation> <noperator> <literal>
+|<literal> <noperator> <operation>
+|(<operation>)
+<literal>::= <number>
+|<id>
+<noperator>::= +
+|-
+|^
+|*
+|/
+|=
+|%
+<loop>::= <forloop>
+|<whileloop>
+<forloop>::= FOR <id> = <number> TO <number> STEP <number><newline><function>
+ENDFOR
+<whileloop>::= WHILE (<condition>) <newline> <function> ENDWHILE
+<condition>::= <literal> <operators> <literal>
+<operators>::= <loperator>
+|<coperator>
+<loperator>::= <
+|>
+|==
+3
+|!=
+<coperator>::= AND
+|OR
+<check>::= <checkif>
+|<checkcase>
+<checkif>::= IF ( <condition> ) THEN <newline> <functionbody> ENDIF
+|IF (<condition>) THEN <newline> <functionbody> ELSE <newline>
+<functionbody> ENDIF
+|IF (<condition>) THEN <newline> <functionbody> <elseif> ELSE
+<newline>
+<functionbody> ENDIF
+<elseif>::= ELSEIF <newline> <functionbody>
+|<elseif> <elseif>
+<checkcase>::= SWITCH ( <expression> ) <newline> <case> <default> ESWITCH
+<case>::= CASE ( <expression> ) : <newline> <functionbody>
+| <case> <case>
+<default>::= DEFAULT : <newline> <functionbody>
+|ε
+<print>::= PRINT (" <message> " , [<var>]) ;
+PRINT (" <message> ");
+<message>::= < literal >
+|< literal > <message>
+|ε
+<break>::= BREAK ;
+<return>::= RETURN <literal> ; <newline>
+<main>::= SMAIN <newline> <varexp> <functionbody> EMAIN
